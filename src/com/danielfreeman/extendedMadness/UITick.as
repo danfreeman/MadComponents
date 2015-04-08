@@ -28,6 +28,7 @@ package com.danielfreeman.extendedMadness {
 	import flash.display.Sprite;
 	import com.danielfreeman.madcomponents.*;
 
+
 /**
  *  MadComonents tick icon
  * <pre>

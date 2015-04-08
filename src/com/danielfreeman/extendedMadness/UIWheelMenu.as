@@ -46,7 +46,11 @@
 	import flash.geom.Rectangle;
 	import flash.utils.getDefinitionByName;
 import flash.geom.Point;
-
+/**
+ * A menu item was selected.
+ */
+	[Event( name="selected", type="flash.events.Event" )]
+	
 /**
  * Wheel Menu
  * <pre>
@@ -253,14 +257,14 @@ import flash.geom.Point;
 		}
 		
 /**
- * Set position of text images.  0 < value < 2
+ * Set position of text images.  0 &lt; value &lt; 2
  */
 		public function set imagePosition(value:Number):void {
 			_imagePosition = value;
 		}
 		
 /**
- * Set position of text labels.  0 < value < 2
+ * Set position of text labels.  0 &lt; value &lt; 2
  */
 		public function set labelPosition(value:Number):void {
 			_labelPosition = value;
@@ -763,17 +767,17 @@ import flash.geom.Point;
 		}
 		
 		
-		override public function get height():Number {
+		override public function get theHeight():Number {
 			if (_xml.@alignV == "bottom") {
-				return super.height / 2 - INNER_RADIUS;
+				return super.theHeight / 2 - INNER_RADIUS;
 			}
 			else {
-				return super.height;
+				return super.theHeight;
 			}
 		}
 	
 		
-		override public function get width():Number {
+		override public function get theWidth():Number {
 			if (_xml.@alignH == "left" || _xml.@alignH == "right") {
 				return super.width / 2 - INNER_RADIUS;
 			}

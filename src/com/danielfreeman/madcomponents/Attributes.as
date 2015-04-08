@@ -283,6 +283,8 @@ package com.danielfreeman.madcomponents {
  * Positions a component according to its positioning attributes
  */	
 		public function position(item:DisplayObject, inhibitV:Boolean = false):void {
+			var itemWidth:Number = (item is MadSprite ? MadSprite(item).theWidth : item.width);
+			var itemHeight:Number = (item is MadSprite ? MadSprite(item).theHeight : item.height);
 			if (_id!="" && item.name!="+" && item.name!="-") {
 				item.name = _id;
 			}
@@ -290,9 +292,9 @@ package com.danielfreeman.madcomponents {
 				case FILL:
 				case LEFT:		item.x = x;
 								break;
-				case RIGHT: 	item.x = x + width - item.width;
+				case RIGHT: 	item.x = x + width - itemWidth;
 								break;
-				case CENTRE:	item.x = x + (width - item.width)/2;
+				case CENTRE:	item.x = x + (width - itemWidth)/2;
 			}
 			if (inhibitV) {
 				item.y = y;
@@ -302,9 +304,9 @@ package com.danielfreeman.madcomponents {
 					case FILL:
 					case TOP:		item.y = y;
 									break;
-					case BOTTOM: 	item.y = y + height - item.height;
+					case BOTTOM: 	item.y = y + height - itemHeight;
 									break;
-					case CENTRE:	item.y = y + (height - item.height)/2;
+					case CENTRE:	item.y = y + (height - itemHeight)/2;
 				}
 			}
 			if (item is MadSprite && _clickable!="") {

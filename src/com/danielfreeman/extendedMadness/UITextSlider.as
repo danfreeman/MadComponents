@@ -42,9 +42,9 @@ package com.danielfreeman.extendedMadness
 	
 
 /**
- *  MadComponent slider
+ *  MadComponent textSlider
  * <pre>
- * &lt;slider
+ * &lt;textSlider
  *   id = "IDENTIFIER"
  *   background = "#rrggbb, #rrggbb, ..."
  *   alignH = "left|right|centre|fill"

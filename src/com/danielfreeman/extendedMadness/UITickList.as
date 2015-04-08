@@ -35,6 +35,35 @@ package com.danielfreeman.extendedMadness {
  * The tickIndexes have changed
  */
 	[Event( name="change", type="flash.events.Event" )]
+/**
+ * A list row was initiated - although we don't yet know whether this is a click or a scroll.
+ */
+	[Event( name="clickStart", type="flash.events.Event" )]
+	
+/**
+ * A list row was clicked.  This is a bubbling event.
+ */
+	[Event( name="clicked", type="flash.events.Event" )]
+
+/**
+ * A list row was clicked.
+ */
+	[Event( name="listClickedEnd", type="flash.events.Event" )]
+
+/**
+ * A list click was cancelled.  This was a scroll, not a click.  
+ */
+	[Event( name="listClickCancel", type="flash.events.Event" )]
+	
+/**
+ * A list row was long-clicked.
+ */
+	[Event( name="longClick", type="flash.events.Event" )]
+
+/**
+ * The Pull-Down-To-Refresh header was activated
+ */
+	[Event( name="pullRefresh", type="flash.events.Event" )]
 	
 
 /**

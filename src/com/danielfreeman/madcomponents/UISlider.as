@@ -232,7 +232,7 @@ package com.danielfreeman.madcomponents
 		}
 		
 		
-		override public function get width():Number {
+		override public function get theWidth():Number {
 			return _width;
 		}
 		

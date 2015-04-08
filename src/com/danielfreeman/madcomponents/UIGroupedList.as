@@ -39,6 +39,36 @@ package com.danielfreeman.madcomponents {
 	import flash.utils.getDefinitionByName;
 
 /**
+ * A list row was initiated - although we don't yet know whether this is a click or a scroll.
+ */
+	[Event( name="clickStart", type="flash.events.Event" )]
+	
+/**
+ * A list row was clicked.  This is a bubbling event.
+ */
+	[Event( name="clicked", type="flash.events.Event" )]
+
+/**
+ * A list row was clicked.
+ */
+	[Event( name="listClickedEnd", type="flash.events.Event" )]
+
+/**
+ * A list click was cancelled.  This was a scroll, not a click.  
+ */
+	[Event( name="listClickCancel", type="flash.events.Event" )]
+	
+/**
+ * A list row was long-clicked.
+ */
+	[Event( name="longClick", type="flash.events.Event" )]
+
+/**
+ * The Pull-Down-To-Refresh header was activated
+ */
+	[Event( name="pullRefresh", type="flash.events.Event" )]
+
+/**
  * A heading (or an area outside a list row) was clicked
  */
 	[Event( name="headingClicked", type="flash.events.Event" )]
@@ -65,6 +95,10 @@ package com.danielfreeman.madcomponents {
  *    autoLayout = "true|false"
  *    headingTextColour = "#rrggbb"
  *    headingShadowColour = "#rrggbb"
+ *    arrows = "true|false"
+ *    labelField = "STRING"
+ *    lineGap = "NUMBER"
+ *    style7 = "true|false"
  * /&gt;
  * </pre>
  */
@@ -109,11 +143,15 @@ package com.danielfreeman.madcomponents {
 			if (xml.@headingShadowColour.length() > 0) {
 				_shadowFormat.color = UI.toColourValue(xml.@headingShadowColour);
 			}
-			_groupSpacing = ((xml.@groupSpacing.length() > 0) ? parseFloat(xml.@groupSpacing) : GROUP_SPACING);// - (_autoLayoutGroup ? GROUP_SPACING : 0);
+			_groupSpacing = ((xml.@groupSpacing.length() > 0) ? parseFloat(xml.@groupSpacing) : defaultGroupSpacing);// - (_autoLayoutGroup ? GROUP_SPACING : 0);
 			_topGroupSpacing = ((xml.@topGroupSpacing.length() > 0) ? parseFloat(xml.@topGroupSpacing) : _groupSpacing);
 			super(screen, xml, attributes);
 			_autoLayout = false;
-		//	_field = "";
+		}
+		
+		
+		protected function get defaultGroupSpacing():Number {
+			return GROUP_SPACING;
 		}
 
 
@@ -187,15 +225,14 @@ package com.danielfreeman.madcomponents {
 		
 		
 		protected function setGroupedData(value:Array):void {
+
 			_saveGroup = _group;
 			_saveIndex = -1;
 			_filteredData = noHeadings(value);
 			initDrawGroups();
 			clearCellGroups();
 			setCellSize();
-			_cellTop =  _top + _topGroupSpacing;// -1.5*_attributes.paddingV + (_autoLayoutGroup ? 2*_attributes.paddingV : 0);
-//;// + (_autoLayoutGroup ? 4 * _attributes.paddingV : 0); //4 * _attributes.paddingV; //_attributes.y +	
-			
+			_cellTop =  _top + _topGroupSpacing;
 			_groupPositions = [];
 			_group = 0;
 			for each(var group:* in value) {
@@ -211,8 +248,7 @@ package com.danielfreeman.madcomponents {
 					}
 				//	var cellTop:Number = _cellTop;
 					super.data0 = group;
-					
-					_groupDetails.cellHeight = (_cellTop - _groupDetails.top) / _length;
+					_groupDetails.cellHeight = (_simple && _autoLayoutGroup) ? _cellHeight : (_cellTop - _groupDetails.top) / group.length;
 					_groupDetails.bottom = _cellTop;
 					_groupPositions.push(_groupDetails);
 					_cellTop += _groupSpacing; //4 * _attributes.paddingV;
@@ -272,6 +308,20 @@ package com.danielfreeman.madcomponents {
 			return (_group>=0 && _pressedCell>=0 && _filteredData && _filteredData[_group]) ? _filteredData[_group][_pressedCell] : null;
 		}
 		
+		
+		protected function simpleAutoLayoutFix(oldGroupDetails:Object):void {
+			if (oldGroupDetails) {
+				oldGroupDetails.bottom = oldGroupDetails.top + _cellHeight * oldGroupDetails.length; //groupDetails.top - _groupSpacing - _gapBetweenGroups - _attributes.paddingV;
+			}
+		}
+		
+		
+		override protected function dealWithArrows(count:int, position:Number):void {
+			if (_arrows && (_header > 0 ? count >= _header : count < _length + _header)) {
+				drawArrow(_width - _attributes.paddingH, (_lastPosition + position) / 2);
+			}
+		}
+		
 /**
  *  Redraw cell chrome
  */
@@ -280,8 +330,10 @@ package com.danielfreeman.madcomponents {
 			var autoLayout:Boolean = _alwaysAutoLayout || !_simple && _autoLayoutGroup;
 			setCellSize();
 			var saveGroup:int = _group;
+			var oldGroupDetails:Object = null;
+			var groupHeight:Number;
 			_group = 0;
-			var last:Number = _topGroupSpacing+ _top;//-1.5*_attributes.paddingV + (_autoLayoutGroup ? 2*_attributes.paddingV : 0);
+			var last:Number = _topGroupSpacing+ _top;
 			for each(var groupDetails:Object in _groupPositions) {
 				_length = groupDetails.length;
 				if (autoLayout) {
@@ -295,9 +347,6 @@ package com.danielfreeman.madcomponents {
 							shadow.y = heading.y + 1;
 						}
 					}
-				//	else {
-				//	last = groupDetails.top = last + _groupSpacing;// + 4 * _attributes.paddingV;
-				//	}
 				}
 				_cellTop = groupDetails.top;
 				headingChrome();
@@ -325,20 +374,20 @@ package com.danielfreeman.madcomponents {
 					last += _groupSpacing;
 				}
 				_group++;
-			//	last += (_xml.@groupSpacing.length() > 0) ? _groupSpacing - 2 * _gapBetweenGroups - groupDetails.cellHeight + 8 : _attributes.paddingV;
-			//	last += (_xml.@groupSpacing.length() > 0) ? _groupSpacing - 2 * _gapBetweenGroups + 8 : _attributes.paddingV;
 				last += _groupSpacing;
 				
 				if (!_simple && autoLayout && groupDetails.visible) {
-				//	last += _groupSpacing; //2 * _gapBetweenGroups;// + 4 * _attributes.paddingV - 4;
-				//	groupDetails.bottom = last - (_alwaysAutoLayout ? _gapBetweenGroups : 0);
 					groupDetails.bottom = last;
 				}
 				if (_alwaysAutoLayout) {
 					last = last - 15;
 					groupDetails.bottom = last + 5;
-				//	last += 2.0*_gapBetweenGroups;
 				}
+				else if (_simple && _autoLayout) {
+					groupDetails.bottom = _cellTop = _slider.getBounds(_slider).bottom + _attributes.paddingH;
+					simpleAutoLayoutFix(oldGroupDetails);
+				}
+				oldGroupDetails = groupDetails;
 			}
 			_group = saveGroup;
 		}
@@ -391,18 +440,13 @@ package com.danielfreeman.madcomponents {
 					_slider.addChild(heading = _heading);
 				}
 				heading.x = _attributes.paddingH;
-			//	heading.y = top + _attributes.paddingV / 2;
-			//	heading.y = top + ( 4 * _attributes.paddingV - heading.height) / 2;
-			//	heading.y = _cellTop + _groupSpacing + heading.height;// ( _groupSpacing - heading.height) / 2;
 				positionHeading(_cellTop, heading);
 				if (shadow) {
 					shadow.y = heading.y + 1;
 				}
 				_heading = null;
-			//	_cellTop = heading.y + heading.height + _attributes.paddingV;
 				_cellTop += heading.height;
 				_groupDetails.top = _cellTop;
-			//	_groupDetails.heading = heading;
 				heading.name = "heading_"+_group.toString();
 				_gapBetweenGroups = 2*_attributes.paddingV;
 			}
@@ -422,7 +466,7 @@ package com.danielfreeman.madcomponents {
 		
 		protected function initDrawGroups():void {
 			_slider.graphics.clear();
-			resizeRefresh();
+		//	resizeRefresh();
 			_slider.graphics.beginFill(0,0);
 			_slider.graphics.drawRect(0,-4*_attributes.paddingV-(_refresh ? TOP : 0),1,1);
 			_lastPosition = _cellTop;
@@ -456,7 +500,7 @@ package com.danielfreeman.madcomponents {
  *  Draw the background for a cell somewhere in the middle of a group
  */	
 		override protected function drawCell(position:Number, count:int, record:*):void {
-			var colour:uint = (record.hasOwnProperty("$colour") && record.$colour) ? record.$colour : CELL_COLOUR;
+			var colour:uint = (record.hasOwnProperty("$colour")) ? record.$colour : CELL_COLOUR;
 			if (_colours.length > 1 && !record.hasOwnProperty("$colour")) {
 				colour = _colours[Math.min(_colours.length - 1, count + 1)];
 			}
@@ -624,7 +668,7 @@ package com.danielfreeman.madcomponents {
 					if (show) {
 						drawHighlight();
 					}
-					activate();
+					activate(show);
 				}
 				else if (sliderMouseY > _top) {
 					_headingClicked = true;
@@ -710,11 +754,11 @@ package com.danielfreeman.madcomponents {
 		
 		
 		override protected function highlightForIndex(rowIndex:int):Boolean {
-			if (_filteredData.length <= _group) {
+			if (_filteredData.length <= _group || !(_filteredData[_group] is Array)) {
 				return false;
 			}
 			var rowData:* = _filteredData[_group][rowIndex];
-			if (rowData.hasOwnProperty("$highlight")) {
+			if (!(rowData is String) && rowData.hasOwnProperty("$highlight") && rowData.$highlight is Boolean) {
 				return rowData.$highlight;
 			}
 			else {
@@ -753,9 +797,6 @@ package com.danielfreeman.madcomponents {
 			}
 		}
 		
-		
-	//	override protected function searchHandler(event:Event):void {
-	//	}
 	
 		override public function set filteredData(value:Array):void {
 			setGroupedData(value);

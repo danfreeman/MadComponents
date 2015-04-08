@@ -63,8 +63,8 @@ package com.danielfreeman.madcomponents {
 		protected static const HEIGHT:Number = 454;
 		protected static const COLOUR:uint = 0x9999AA;
 		
-		protected static const TOKENS:Array = ["scrollVertical","viewFlipper","list","groupedList","dividedList","pages","tabPages","navigation","navigationPages","longList", "imageLoader", "image", "switch", "search", "button", "label", "slider", "input", "renderer"];
-		protected static const CLASSES:Array = [UIScrollVertical,UIViewFlipper,UIList,UIGroupedList,UIDividedList,UIPages,UITabPages,UINavigation,UINavigationPages,UILongList, UIImageLoader, UIImage, UISwitch, UISearch, UIButtonX, UILabelX, UISliderX, UIInputX, UIRenderer];
+		protected static const TOKENS:Array = ["scrollVertical","viewFlipper","list","groupedList","dividedList","pages","tabPages","navigation","navigationPages","longList", "imageLoader", "image", "switch", "search", "button", "label", "slider", "input", "renderer", "circular", "gap", "pickerView"];
+		protected static const CLASSES:Array = [UIScrollVertical,UIViewFlipper,UIList,UIGroupedList,UIDividedList,UIPages,UITabPages,UINavigation,UINavigationPages,UILongList, UIImageLoader, UIImage, UISwitch, UISearch, UIButtonX, UILabelX, UISliderX, UIInputX, UIRenderer, UICircular, UISpacer, UIPickerView];
 
 		protected static const DEBUG_SCALE:Number = -1.0;
 
@@ -140,11 +140,11 @@ package com.danielfreeman.madcomponents {
 			}
 			_root.scaleX = _root.scaleY = _scale;
 			
-			var colours:String = xml.@stageColour;
-			if (colours) {
-				_stageColours = toColourVector(colours);
-				drawBackgroundColour(_stageColours, width, height);
-			}
+	//		var colours:String = xml.@stageColour;
+	//		if (colours) {
+	//			_stageColours = toColourVector(colours);
+	//			drawBackgroundColour(_stageColours, width, height);
+	//		}
 			
 			if (!SIMULATION_RESIZE && _maskIt && _simulated) {
 				var mask:Sprite = new Sprite();
@@ -296,7 +296,7 @@ package com.danielfreeman.madcomponents {
 /**
  * Rearrange the UI for a new screen size
  */	
-		public static function layout(width:Number = -1, height:Number = -1):void {
+		public static function layout(width:Number = -1, height:Number = -1):void {trace("UI.layout", width, height);
 		//	if (_root) {
 				if (width < 0) {
 					width = _screen.stage.stageWidth;
@@ -322,17 +322,17 @@ package com.danielfreeman.madcomponents {
 				if (_root && !_root.mouseEnabled) {
 					dimUI();
 				}
-				drawStageBackground();
+		//		drawStageBackground();
 				centrePopUps();
 		//	}
 		}
 		
 		
-		public static function drawStageBackground():void {
-			if (!isForm(_xml.localName())) {
-				drawBackgroundColour(_attributes.backgroundColours, _width, _height);
-			}
-		}
+	//	public static function drawStageBackground():void {
+	//		if (!isForm(_xml.localName())) {
+	//			drawBackgroundColour(_attributes.backgroundColours, _width, _height);
+	//		}
+	//	}
 		
 
 		protected static function newAttributes(width:Number, height:Number):Attributes {
@@ -394,8 +394,8 @@ package com.danielfreeman.madcomponents {
  * Show the pop-up dialogue window
  */	
 		public static function showPopUp(window:UIWindow):void {
-			if (window.visible) return;
-			window.visible = true;
+			if (window.isVisible) return;
+			window.isVisible = true;
 			_popUps++;
 			dimUI();
 		}
@@ -404,8 +404,8 @@ package com.danielfreeman.madcomponents {
  * Hide the pop-up dialogue window
  */	
 		public static function hidePopUp(window:UIWindow):void {
-			if (!window.visible) return;
-			window.visible = false;
+			if (!window.isVisible) return;
+			window.isVisible = false;
 			_popUps--;
 			if (_popUps <= 0) {
 				unDimUI();
@@ -416,7 +416,7 @@ package com.danielfreeman.madcomponents {
  * Show activity indicator
  */	
 		public static function showActivityIndicator():void {
-			_activityIndicator.visible = true;
+			_activityIndicator.isVisible = true;
 		//	_screen.setChildIndex(_activityIndicator, _screen.numChildren-1);
 		}
 		
@@ -424,7 +424,7 @@ package com.danielfreeman.madcomponents {
  * Hide the activity indicator
  */	
 		public static function hideActivityIndicator():void {
-			_activityIndicator.visible = false;
+			_activityIndicator.isVisible = false;
 		}
 		
 /**

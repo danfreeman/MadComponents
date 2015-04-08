@@ -70,7 +70,8 @@ package com.danielfreeman.extendedMadness {
 				var index:int = whichScreenIndex();
 				_thisPage = _pages[index];
 				_page = index;
-				_thisPage.visible = true;
+			//	_thisPage.visible = true;
+				setVisible(_thisPage, true);
 			}
 		}
 		
@@ -99,9 +100,11 @@ package com.danielfreeman.extendedMadness {
 		override public function layout(attributes:Attributes):void {
 			var newPageIndex:int = whichScreenIndex();
 			if (_page != newPageIndex) {
-				_thisPage.visible = false;
+			//	_thisPage.visible = false;
+				setVisible(_thisPage, false);
 				_thisPage = _pages[newPageIndex];
-				_thisPage.visible = true;
+			//	_thisPage.visible = true;
+				setVisible(_thisPage, true);
 				_page = newPageIndex;
 				dispatchEvent(new Event(SCREEN_CHANGED));
 			}

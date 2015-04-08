@@ -37,7 +37,7 @@ package com.danielfreeman.extendedMadness
 /**
  *  MadComponents tabbed pages container
  * <pre>
- * &lt;tabPages
+ * &lt;tabPagesSliding
  *    id = "IDENTIFIER"
  *    colour = "#rrggbb"
  *    background = "#rrggbb, #rrggbb, ..."
@@ -50,6 +50,17 @@ package com.danielfreeman.extendedMadness
  *    border = "true|false"
  *    mask = "true|false"
  *    alt = "true|false"
+ *    highlightColour = "#rrggbb"
+ *    iconColour = "#rrggbb"
+ *    activeColour = "#rrggbb"
+ *    background = "#rrggbb, #rrggbb"
+ *    leftMargin = "NUMBER"
+ *    pixelSnapping = "true|false"
+ *    scaleHeight = "NUMBER"
+ *    &lt;data&gt;LABELS&lt;/data&gt;
+ *    &lt;font&gt;FORMAT&lt;/font&gt;
+ *    &lt;activeFont&gt;FORMAT&lt;/activeFont&gt;
+ *    &lt;disableFont&gt;FORMAT&lt;/disableFont&gt;
  * /&gt;
  * </pre>
  */

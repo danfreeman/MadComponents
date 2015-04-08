@@ -65,11 +65,8 @@ package com.danielfreeman.extendedMadness {
  *    fixedColumnsColours = "#rrggbb, #rrggbb, ..."
  *    slideFixedColumns = "true|false"
  *    lockSides = "true|false"
- *    <title>
- *    <font>
- *    <headerFont>
- *    <model>
- *    <widths> (depreciated)
+ *    lockTopBottom = "true|false"
+ *    datagrid = "simple|fast|special"
  * /&gt;
  * </pre>
  */

@@ -92,16 +92,6 @@ package com.danielfreeman.extendedMadness {
 		}
 		
 		
-	//	public function get attributes():Attributes {
-	//		return _attributes;
-	//	}
-		
-		
-	//	public function get xml():XML {
-	//		return _xml;
-	//	}
-		
-		
 		override public function get pages():Array {
 			return [_slider];
 		}

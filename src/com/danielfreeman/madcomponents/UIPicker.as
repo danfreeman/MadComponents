@@ -97,7 +97,7 @@ package com.danielfreeman.madcomponents
 				_cursorHeight = parseFloat(xml.@cursorHeight[0]);
 			}
 			if (xml.@jogable.length() > 0) {
-				_jogable = xml.@clickable == "true";
+				_jogable = xml.@jogable == "true";
 			}
 			super(screen, xml, attributes);
 		//	_decay = PICKER_DECAY;

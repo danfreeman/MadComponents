@@ -1,3 +1,28 @@
+/**
+ * <p>Original Author: Daniel Freeman</p>
+ *
+ * <p>Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:</p>
+ *
+ * <p>The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.</p>
+ *
+ * <p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.</p>
+ *
+ * <p>Licensed under The MIT License</p>
+ * <p>Redistributions of files must retain the above copyright notice.</p>
+ */
+
 package com.danielfreeman.extendedMadness
 {
 	import flash.system.Capabilities;
@@ -24,7 +49,7 @@ package com.danielfreeman.extendedMadness
  *    highlightColour = "#rrggbb"
  *    iconColour = "#rrggbb"
  *    activeColour = "#rrggbb"
- *    background = "#rrggbb, #rrggbb, ‚Ä¶"
+ *    background = "#rrggbb, #rrggbb"
  *    gapV = "NUMBER"
  *    gapH = "NUMBER"
  *    alignH = "left|right|centre|fill"
@@ -100,15 +125,15 @@ package com.danielfreeman.extendedMadness
 
 			if (xml.font.length() > 0) {
 				_labelFormat = UIe.toTextFormat(xml.font[0] ,LABEL_FORMAT);
-				delete xml.font;
+			//	delete xml.font;
 			}
 			if (xml.activeFont.length() > 0) {
 				_labelHighlight = UIe.toTextFormat(xml.activeFont[0] ,LABEL_HIGHLIGHT);
-				delete xml.activeFont;
+			//	delete xml.activeFont;
 			}
 			if (xml.disableFont.length() > 0) {
 				_labelDisable = UIe.toTextFormat(xml.disableFont[0] ,LABEL_DISABLE);
-				delete xml.disableFont;
+			//	delete xml.disableFont;
 			}
 			if (xml.data.length() > 0) {
 			//	_data = new <String>[];
@@ -123,13 +148,25 @@ package com.danielfreeman.extendedMadness
 			//		}
 			//	}
 				extractData(xml);
-				delete xml.data;
+			//	delete xml.data;
 			}
+			xml = doDeletes(xml);
 			if (_text == "" && xml.toString() != "") {
 				text = xml.toString().replace(/[\s\r\n\t]/g,"");
 				unHighlight();
 			}
-			
+		}
+		
+		
+		protected function doDeletes(xml:XML):XML {
+			const exclude:Array = ["font","activeFont","disableFont","data"];
+			var result:XML = <icons/>;
+			for each(var child:XML in xml.children()) {
+				if (child.localName() == null || exclude.indexOf(child.localName().toString()) < 0) {
+					result.appendChild(child);
+				}
+			}
+			return result;
 		}
 		
 		

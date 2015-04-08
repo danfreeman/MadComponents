@@ -7,9 +7,38 @@ package com.danielfreeman.extendedMadness {
 
 	import com.danielfreeman.madcomponents.Attributes;
 
-	/**
-	 * @author danielfreeman
-	 */
+/**
+ *  Datagrid component
+ * <pre>
+ * &lt;specialDataGrid
+ *    id = "IDENTIFIER"
+ *    colour = "#rrggbb"
+ *    background = "#rrggbb, #rrggbb, ..."
+ *    visible = "true|false"
+ *    alignH = "left|right|centre|fill"
+ *    alignV = "top|bottom|centre|fill"
+ *    widths = "i(%),j(%),k(%)…"
+ *    multiline = "true|false"
+ *    wordWrap = "true|false"
+ *    titleBarColour = "#rrggbb"
+ *    recycle = "true|false|shared"
+ *    headerLines = "true|false"
+ *    colSpan = "true|false"
+ *    colSpanWrap = "true|false"
+ *    imageMarginH = "NUMBER"
+ *    imageMarginV = "NUMBER"
+ *    &lt;title/&gt;
+ *    &lt;font/&gt;
+ *    &lt;headerFont/&gt;
+ *    &lt;titleFont/&gt;
+ *    &lt;header/&gt;
+ *    &lt;data&gt;
+ *    	&lt;header/&gt;
+ *    &lt;/data&gt;
+ *    &lt;widths/&gt; (depreciated)
+ * /&gt;
+ * </pre>
+ */
 	public class UISpecialDataGrid extends UIFastDataGrid {
 		
 		protected var _dataAndExtras:Array;

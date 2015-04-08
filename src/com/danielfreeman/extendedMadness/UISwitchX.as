@@ -283,7 +283,7 @@ package com.danielfreeman.extendedMadness {
 		}
 		
 		
-		override public function get width():Number {
+		override public function get theWidth():Number {
 			return WIDTH;
 		}
 		

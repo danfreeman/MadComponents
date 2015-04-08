@@ -85,9 +85,9 @@ package com.danielfreeman.madcomponents {
 /**
  * Rotation is started if the component is made visible, and halted when visible = false
  */	
-		override public function set visible(value:Boolean):void {
+		public function set isVisible(value:Boolean):void {
 			rotate = value;
-			super.visible = value;
+			visible = value;
 		}
 		
 		

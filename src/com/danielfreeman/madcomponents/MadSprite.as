@@ -77,6 +77,22 @@ package com.danielfreeman.madcomponents
 			_attributes = attributes;
 		}
 		
+		public function get theWidth():Number {
+			return width;
+		}
+		
+		public function get theHeight():Number {
+			return height;
+		}
+		
+		public function set isVisible(value:Boolean):void {
+			visible = value;
+		}
+		
+		public function get isVisible():Boolean {
+			return visible;
+		}
+		
 		public function destructor():void {
 		}
 	}

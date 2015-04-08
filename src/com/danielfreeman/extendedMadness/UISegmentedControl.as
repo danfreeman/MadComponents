@@ -203,16 +203,6 @@ package com.danielfreeman.extendedMadness
 					label.y = (_height - label.height) / 2;
 				}
 		}
-
-
-	//	public function get attributes():Attributes {
-	//		return _attributes;
-	//	}
-		
-		
-	//	public function findViewById(id:String, row:int = -1, group:int = -1):DisplayObject {
-	//		return null;
-	//	}
 		
 		
 		public function clear():void {
@@ -220,16 +210,6 @@ package com.danielfreeman.extendedMadness
 				removeChild(label);
 			_labels = new <UILabel>[];
 		}
-		
-		
-	//	public function get pages():Array {
-	//		return [];
-	//	}
-		
-		
-	//	public function get xml():XML {
-	//		return _xml;
-	//	}
 		
 		
 		public function clearPressed():void {

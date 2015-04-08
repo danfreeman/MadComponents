@@ -1,9 +1,3 @@
-Text for description in com.danielfreeman.extendedMadness:UIScrollTouchGrids is not valid.
-org.xml.sax.SAXParseException: The element type "widths" must be terminated by the matching end-tag "</widths>".
-
-Text for description in com.danielfreeman.extendedMadness:UIWheelMenu/imagePosition/set is not valid.
-org.xml.sax.SAXParseException: The content of elements must consist of well-formed character data or markup.
-
-Text for description in com.danielfreeman.extendedMadness:UIWheelMenu/labelPosition/set is not valid.
-org.xml.sax.SAXParseException: The content of elements must consist of well-formed character data or markup.
+Text for description in com.danielfreeman.extendedMadness:UIImageX is not valid.
+org.xml.sax.SAXParseException: The element type "image" must be terminated by the matching end-tag "</image>".
 

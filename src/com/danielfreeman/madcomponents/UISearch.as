@@ -48,6 +48,7 @@ package com.danielfreeman.madcomponents {
  *   field = "IDENTIFIER"
  *   begins = "true|false"
  *   clearButton = "true|false"
+ *   style7 = "true|false"
  * /&gt;
  * </pre>
  */

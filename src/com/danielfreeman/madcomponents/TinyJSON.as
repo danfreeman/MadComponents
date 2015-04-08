@@ -54,6 +54,7 @@ package com.danielfreeman.madcomponents {
 				if (_json.charAt(_pos)=="]")
 					return result;
 				result.push(parseValue());
+				skipSpaces();
 			}
 			while (_json.charAt(_pos)==',')
 			_pos++;

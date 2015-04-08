@@ -49,30 +49,37 @@ package com.danielfreeman.extendedMadness {
  *    wordWrap = "true|false"
  *    titleBarColour = "#rrggbb"
  *    recycle = "true|false|shared"
- *    <title>
- *    <font>
- *    <headerFont>
- *    <titleFont>
- *    <header>
+ *    headerLines = "true|false"
+ *    colSpan = "true|false"
+ *    colSpanWrap = "true|false"
+ *    <title/>
+ *    <font/>
+ *    <headerFont/>
+ *    <titleFont/>
+ *    <header/>
  *    <data>
- *    	<header>
+ *    	<header/>
  *    </data>
- *    <widths> (depreciated)
+ *    <widths/> (depreciated)
  * /&gt;
  * </pre>
  */
 	public class UIFastDataGrid extends UISimpleDataGrid { 
 
-		protected var _headerLines:Boolean = false;
+		
+		protected var _colSpan:Boolean;
+		protected var _colSpanWrap:Boolean;
+		protected var _colSpanWidths:Vector.<Number> = null;
 
 		public function UIFastDataGrid(screen:Sprite, xml:XML, attributes:Attributes) {							   
-			_headerLines = xml.@headerLines == "true";
 			if (xml.@multiLine.length() > 0) {
 				_multiLine = xml.@multiLine == "true";
 			}
 			if (xml.@wordWrap.length() > 0) {
 				_wordWrap = xml.@wordWrap == "true";
 			}
+			_colSpan = xml.@colSpan != "false";
+			_colSpanWrap = xml.@colSpanWrap != "false";
 			super(screen, xml, attributes);
 		}
 		
@@ -124,7 +131,7 @@ package com.danielfreeman.extendedMadness {
 /**
  *  Render table cells
  */
-		override protected function makeTable(data:Array, format:TextFormat=null):void {  
+		override protected function makeTable(data:Array, format:TextFormat=null):void {
 			if (!format) format=_dataStyle;
 			format.leftMargin=_leftMargin; 
 			for (var i:int=0;i<data.length;i++) { 
@@ -133,7 +140,7 @@ package com.danielfreeman.extendedMadness {
 				var wdth0:Number=_tableWidth/dataRow.length; 
 				var lastX:Number=0;
 				var theWidth:Number = Math.max(getBounds(this).right, _tableWidth);
-				for (var j:int=0;j<dataRow.length;j++) { 
+				for (var j:int=0;j<dataRow.length;j++) {
 				//	var wdth:Number = (_cellWidths) ? _tableWidth*_cellWidths[Math.min(_cellWidths.length-1,j)]/100 : wdth0;
 				//	var txt:UICell = new UICell(this, lastX, _last, dataRow[j], wdth, format, _border);
 					var wdth:Number;
@@ -141,7 +148,7 @@ package com.danielfreeman.extendedMadness {
 						wdth = Math.ceil(theWidth - lastX);
 					}
 					else {
-						wdth = Math.ceil(_columnWidths ? _columnWidths[j] : (_cellWidths) ? _tableWidth*_cellWidths[Math.min(_cellWidths.length-1,j)]/100 : wdth0);
+						wdth = Math.ceil(_columnWidths ? _columnWidths[j] : (_cellWidths ? _tableWidth*_cellWidths[Math.min(_cellWidths.length-1,j)]/100 : wdth0));
 					}
 					var cell:UICell = newCell(format);
 					cell.x = lastX;
@@ -149,7 +156,7 @@ package com.danielfreeman.extendedMadness {
 					cell.xmlText = dataRow[j];
 					cell.fixwidth = wdth;
 					row.push(cell);
-					cell.border = true;
+					cell.border = _border;
 					cell.borderColor = _borderColour;
 					cell.multiline = _multiLine;
 					cell.wordWrap = _wordWrap;
@@ -238,6 +245,17 @@ package com.danielfreeman.extendedMadness {
 			}
 			drawBackground();
 		}
+		
+		
+		protected function get calculateWidth():Number {
+			var result:Number = 0;
+			var row:Vector.<UICell> = _table[0];
+			var wdth:Number=_tableWidth/row.length;
+			for (var i:int = 0; i < row.length; i++) {
+				result += Math.ceil(_columnWidths ? _columnWidths[i] : (_cellWidths ? _tableWidth*_cellWidths[Math.min(_cellWidths.length-1,i)]/100 : wdth));
+			}
+			return result;
+		}
 
 /**
  *  Realign and adjust the datagrid cell positions
@@ -247,24 +265,28 @@ package com.danielfreeman.extendedMadness {
 				return;
 			}
 			var lastY:Number = 0;
+			var columns:int = _table[0].length;
 			graphics.clear();
-			var wdth0:Number=_tableWidth/_table[0].length;
+			var wdth0:Number=_tableWidth/columns;
 			if (_title) {
 				_title.autoSize = TextFieldAutoSize.LEFT;
 				lastY = _title.height;
 				_title.fixwidth = _tableWidth;
 			}
+			var theWidth:Number = _fits ? _tableWidth : Math.max(calculateWidth, _tableWidth);
 			for (var i:int = 0; i<_table.length; i++) {
 				var row:Vector.<UICell> = _table[i];
 			//	var wdth0:Number=_tableWidth/row.length;
 				
 				var position:Number = 0;
 				var maxHeight:Number = initialHeight(i);
-				var theWidth:Number = Math.max(getBounds(this).right, _tableWidth);
+				
 				for (var j:int = 0; j < row.length; j++) {
 					var wdth:Number;
+					var colSpan:Boolean = false;
 					if (j == row.length - 1) {
 						wdth = Math.ceil(theWidth - position);
+						colSpan = _colSpanWrap && j < columns - 1;
 					}
 					else {
 						wdth = Math.ceil(_columnWidths ? _columnWidths[j] : (_cellWidths) ? _tableWidth*_cellWidths[Math.min(_cellWidths.length-1,j)]/100 : wdth0);
@@ -273,10 +295,10 @@ package com.danielfreeman.extendedMadness {
 					cell.x = position;
 					cell.y = lastY;
 					cell.fixwidth = wdth;
-					cell.multiline = _multiLine;
-					cell.wordWrap = _wordWrap;
+					cell.multiline = _multiLine || colSpan;
+					cell.wordWrap = _wordWrap || colSpan;
 					position += wdth;
-					if (_wordWrap) {//_multiLine
+					if (_wordWrap || colSpan) {//_multiLine
 						cell.autoSize = TextFieldAutoSize.LEFT;
 					}
 					if (cell.height > maxHeight) {
@@ -313,8 +335,8 @@ package com.danielfreeman.extendedMadness {
  */
 		override public function yToRow(y:Number):int {
 			var result:int = -1;
-			if (_table.length > 0 && y > 0 && y <= height) {
-				result = Math.min(Math.round(_table.length * y / height), _table.length - 1);
+			if (_table.length > 0 && y > 0 && y <= theHeight) {
+				result = Math.min(Math.round(_table.length * y / theHeight), _table.length - 1);
 				var cell:UICell = _table[result][0];
 				if (y < cell.y) {
 					result--;
@@ -329,7 +351,8 @@ package com.danielfreeman.extendedMadness {
 					}
 				}
 			}
-			return (hasHeader && result == 0) ? -1 : result;
+			return result;
+		//	return (hasHeader && result == 0) ? -1 : result;
 		}
 		
 /**
@@ -406,18 +429,59 @@ package com.danielfreeman.extendedMadness {
 		}
 		
 		
+		protected function addColSpanPadding():void {
+			if (!_colSpan || !_columnWidths || !_colSpanWidths) {
+				return;
+			}
+			var sum:Number = 0;
+			var maxWidth:Number = 0;
+			for (var i:int = 0; i < _columnWidths.length; i++) {
+				var rowWidth:Number = sum + _colSpanWidths[i];
+				if (rowWidth > maxWidth) {
+					maxWidth = rowWidth;
+				}
+				sum += _columnWidths[i];
+			}
+			if (maxWidth > sum) {
+				if (!_colSpanWrap) {
+					_columnWidths[_columnWidths.length - 1] += (maxWidth - sum);
+					_fits = false;
+				}
+			}
+		}
+		
+		
 		override protected function initialiseColumnWidths():void {
-			_columnWidths = new Vector.<Number>(_table[0].length);
+			var columns:int = _table[0].length;
+			_colSpanWidths = new Vector.<Number>(columns);
+			_columnWidths = new Vector.<Number>(columns);
+			var hasColSpans:Boolean = false;
 			for (var i:int = 0; i<_table.length; i++) {
 				var row:Vector.<UICell> = _table[i];
-				for (var j:int = 0; j < row.length; j++) {
-					var cell:UICell = row[j];
-					cell.multiline = cell.wordWrap = false;
-					cell.autoSize = TextFieldAutoSize.LEFT;
-					if (cell.width > _columnWidths[j]) {
-						_columnWidths[j] = cell.width + 1.0;
+				if (!_colSpan || row.length == columns || i < row.length - 1) {
+					for (var j:int = 0; j < row.length; j++) {
+						var cell:UICell = row[j];
+						cell.multiline = cell.wordWrap = false;
+						cell.autoSize = TextFieldAutoSize.LEFT;
+						if (cell.width > _columnWidths[j]) {
+							_columnWidths[j] = cell.width + 1.0;
+						}
 					}
 				}
+				else {
+					var index:int = row.length - 1;
+					var lastCell:UICell = row[index];
+					lastCell.multiline = lastCell.wordWrap = false;
+					lastCell.autoSize = TextFieldAutoSize.LEFT;
+					var colSpanWidth:Number = lastCell.width;
+					if (colSpanWidth > _colSpanWidths[index]) {
+						_colSpanWidths[index] = colSpanWidth;
+						hasColSpans = true;
+					}
+				}
+			}
+			if (!hasColSpans) {
+				_colSpanWidths = null;
 			}
 		}
 		
@@ -468,6 +532,7 @@ package com.danielfreeman.extendedMadness {
 						}
 					}
 				}
+				addColSpanPadding();
 				rejig();
 			}
 		}

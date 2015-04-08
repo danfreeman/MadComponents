@@ -31,6 +31,36 @@ package com.danielfreeman.madcomponents {
 	import flash.display.Sprite;
 	import flash.geom.Matrix;
 	import flash.text.TextFormat;
+
+/**
+ * A list row was initiated - although we don't yet know whether this is a click or a scroll.
+ */
+	[Event( name="clickStart", type="flash.events.Event" )]
+	
+/**
+ * A list row was clicked.  This is a bubbling event.
+ */
+	[Event( name="clicked", type="flash.events.Event" )]
+
+/**
+ * A list row was clicked.
+ */
+	[Event( name="listClickedEnd", type="flash.events.Event" )]
+
+/**
+ * A list click was cancelled.  This was a scroll, not a click.  
+ */
+	[Event( name="listClickCancel", type="flash.events.Event" )]
+	
+/**
+ * A list row was long-clicked.
+ */
+	[Event( name="longClick", type="flash.events.Event" )]
+
+/**
+ * The Pull-Down-To-Refresh header was activated
+ */
+	[Event( name="pullRefresh", type="flash.events.Event" )]
 	
 /**
  * MadComponents divided list
@@ -55,6 +85,8 @@ package com.danielfreeman.madcomponents {
  *    headingTextColour = "#rrggbb"
  *    headingShadowColour = "#rrggbb"
  *    headingHeight = "NUMBER"
+ *    labelField = "IDENTIFIER"
+ *    lineGap = "NUMBER"
  * /&gt;
  * </pre>
  */	
@@ -66,8 +98,11 @@ package com.danielfreeman.madcomponents {
 		public function UIDividedList(screen:Sprite, xml:XML, attributes:Attributes) {
 			_headingOffColour = _headingColour = (xml.@headingColour.length() > 0) ? UI.toColourValue(xml.@headingColour) : attributes.colour;
 			super(screen, xml, attributes);
-
-		//	doLayout();
+		}
+		
+		
+		override protected function get defaultGroupSpacing():Number {
+			return 10;
 		}
 		
 		
@@ -77,7 +112,7 @@ package com.danielfreeman.madcomponents {
 		
 		
 		override protected function drawCell(position:Number, count:int, record:*):void {
-			drawSimpleCell(position, count, record.hasOwnProperty("$colour") ? record.$colour : uint.MAX_VALUE);
+			drawSimpleCell(position, count, (!(record is String) &&record.hasOwnProperty("$colour")) ? record.$colour : uint.MAX_VALUE);
 			if (!(record is String) && hasLines(record)) {
 				drawLines(position);
 			}
@@ -92,8 +127,8 @@ package com.danielfreeman.madcomponents {
 				_highlight.graphics.clear();
 				var groupDetails:Object = _groupPositions[_group];
 				var autoLayout:Boolean = _autoLayoutGroup && !_simple;
-				var top:Number = autoLayout ? _row.y - _attributes.paddingV + 1 : groupDetails.top + _pressedCell * groupDetails.cellHeight;
-				var bottom:Number = top + (autoLayout ? _row.height + 2 * _attributes.paddingV - 1 : groupDetails.cellHeight);
+				var top:Number = autoLayout ? _row.y - _attributes.paddingV : groupDetails.top + _pressedCell * groupDetails.cellHeight;
+				var bottom:Number = top + (autoLayout ? _row.height + 2 * _attributes.paddingV : groupDetails.cellHeight);
 				_highlight.graphics.beginFill(_highlightColour);
 			//	_highlight.graphics.drawRect(_cellLeft, top + 1, _cellWidth + 1, bottom - top - 1);
 				_highlight.graphics.drawRect(0, top + 1, _attributes.widthH, bottom - top - 1);
@@ -104,11 +139,6 @@ package com.danielfreeman.madcomponents {
 		override protected function headingChrome():void {
 			initDraw();
 		}
-		
-		
-	//	override protected function positionHeading(top:Number, heading:DisplayObject):void {
-	//		heading.y = top - _groupSpacing / 3; // + heading.height;// + (_groupSpacing < _attributes.paddingV ? _attributes.paddingV : 0); // + (_groupSpacing - heading.height) / 2 + 1.5 * _attributes.paddingV;
-	//	}
 		
 /**
  *  Draw a group heading
@@ -152,7 +182,6 @@ package com.danielfreeman.madcomponents {
 			
 			_slider.graphics.beginFill(_attributes.style7 ? headingColour : Colour.darken(_colour,-32));
 			_slider.graphics.drawRect(0, _cellTop - 1, _width, _attributes.style7 ? 2 : 1);
-		//	_gapBetweenGroups = ((autoLayout && false) ? -2 * _attributes.paddingV : -_attributes.paddingV) - 1;
 			_gapBetweenGroups = -_attributes.paddingV - 1;
 		}
 		
@@ -178,7 +207,7 @@ package com.danielfreeman.madcomponents {
 			if (_simple) {
 				_autoLayout = _autoLayoutGroup = false;
 			}
-			resizeRefresh();
+		//	resizeRefresh();
 		}
 		
 		

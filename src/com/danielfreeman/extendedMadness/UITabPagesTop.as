@@ -51,6 +51,8 @@ package com.danielfreeman.extendedMadness
  *    border = "true|false"
  *    mask = "true|false"
  *    alt = "true|false"
+ *    lazyRender = "true|false"
+ *    recycle = "true|false"
  * /&gt;
  * </pre>
  */
@@ -86,8 +88,9 @@ package com.danielfreeman.extendedMadness
 				_buttonBar.y = 0;
 			}
 			else {
+				_pagesAttributes = attributes.copy();
 				addChild(_buttonBar = new UITabButtonRow(this, xml, attributes));
-				attributes.height -= _buttonBar.height;
+				_pagesAttributes.height -= _buttonBar.height;
 			}
 		}
 		
@@ -116,7 +119,9 @@ package com.danielfreeman.extendedMadness
 		 *  Rearrange the layout to new screen dimensions
 		 */	
 		override public function layout(attributes:Attributes):void {
+			_fullPageAttributes = _attributes = attributes;
 			if (_alt) {
+				_pagesAttributes = attributes.copy();
 				super.layout(attributes);
 				_buttonBar.y = 0;
 			}
@@ -135,12 +140,16 @@ package com.danielfreeman.extendedMadness
 			spacing();
 			_attributes = attributes.copy();
 			_attributes.y = _buttonBar.height;
+			if (_thisPage && !_buttonBar.visible) {
+				_thisPage.y = 0;
+			}
 		}
 		
 		
 		override public function set pageNumber(value:int):void {
 			UITabButtonRow(_buttonBar).index = value;
 			super.goToPage(value);
+
 		}
 		
 		

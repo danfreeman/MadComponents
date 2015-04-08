@@ -1,4 +1,29 @@
-package com.danielfreeman.extendedMadness {
+/**
+ * <p>Original Author: Daniel Freeman</p>
+ *
+ * <p>Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:</p>
+ *
+ * <p>The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.</p>
+ *
+ * <p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.</p>
+ *
+ * <p>Licensed under The MIT License</p>
+ * <p>Redistributions of files must retain the above copyright notice.</p>
+ */
+ 
+ package com.danielfreeman.extendedMadness {
 	
 	import flash.events.MouseEvent;
 	import com.danielfreeman.extendedMadness.*;
@@ -12,6 +37,59 @@ package com.danielfreeman.extendedMadness {
 	import flash.display.GradientType;
 	import flash.geom.Matrix;
 
+/**
+ * A page has changed
+ */
+	[Event( name="change", type="flash.events.Event" )]
+
+	
+/**
+ * A page transition has completed
+ */
+	[Event( name="changeComplete", type="flash.events.Event" )]
+
+/**
+ * Slide Out Clicked
+ */
+	[Event( name="slideOutClicked", type="flash.events.Event" )]
+
+	
+/**
+ * Slide Out Complete
+ */
+	[Event( name="slideComplete", type="flash.events.Event" )]
+
+/**
+ *  SlideOutNavigation component
+ * <pre>
+ * &lt;slideOutNavigation
+ *    id = "IDENTIFIER"
+ *    colour = "#rrggbb"
+ *    background = "#rrggbb, #rrggbb, ..."
+ *    visible = "true|false"
+ *    gapV = "NUMBER"
+ *    gapH = "NUMBER"
+ *    alignH = "left|right|centre|fill"
+ *    alignV = "top|bottom|centre|fill"
+ *    leftButton = "TEXT"
+ *    rightButton = "TEXT"
+ *    rightArrow = "TEXT"
+ *    leftArrow = "TEXT"
+ *    title = "TEXT"
+ *    autoFill = "true|false"
+ *    autoTitle = "TEXT"
+ *    border = "true|false"
+ *    mask = "true|false"
+ *    backToExit = "true|false"
+ *    leftButtonColour = "#rrggbb"
+ *    rightButtonColour = "#rrggbb"
+ *    arrowColour = "#rrggbb"
+ *    autoForward = "true|false"
+ *    backKey = "true|false"
+ *    style7 = "true|false"
+ * /&gt;
+ * </pre>
+ */
 	public class UISlideOutNavigation extends UIContainerBaseClass {
 		
 		public static const CLICKED:String = "slideOutClicked";
@@ -23,7 +101,7 @@ package com.danielfreeman.extendedMadness {
 		protected static const SHADOW_WIDTH:Number = 8.0;
 		
 		public static var SLIDE_INTERVAL:int = 40;
-		public static var STEPS:int = 6;
+		public static var STEPS:int = 4;
 		
 		protected var _listXML:XML = null;
 		protected var _detailXML:XML = null;
@@ -35,7 +113,7 @@ package com.danielfreeman.extendedMadness {
 		protected var _startX:Number;
 		protected var _buttonEnabled:Boolean = true;
 		
-		
+
 		public function UISlideOutNavigation(screen : Sprite, xml : XML, attributes : Attributes) {
 			super(screen, xml, attributes);
 			
@@ -88,7 +166,7 @@ package com.danielfreeman.extendedMadness {
 			_navigationBar.leftButton.visible = true;
 			_navigationBar.leftButton.text = " ";
 			_navigationBar.leftButton.fixwidth = 40;
-			_list.y = _form.y = _navigationBar.height;
+			_list.y = _form.y = UINavigationBar.HEIGHT;
 			
 			makeMenuButton();
 			drawShadow(attributes.height - _navigationBar.height);
@@ -203,7 +281,7 @@ package com.danielfreeman.extendedMadness {
 		override public function layout(attributes:Attributes):void {
 			_navigationBar.fixwidth = attributes.width;
 			_listWidth = Math.min(MAXIMUM_LIST_WIDTH, attributes.width - LEFT_OVER);
-			var listAttributes:Attributes = new Attributes(0, 0, _listWidth - SHADOW_WIDTH/2, attributes.height - _navigationBar.height);
+			var listAttributes:Attributes = new Attributes(0, 0, _listWidth - SHADOW_WIDTH/2, attributes.height - UINavigationBar.HEIGHT);
 			var formAttributes:Attributes = attributes.copy(_detailXML);
 			formAttributes.height -= UINavigationBar.HEIGHT;
 			if (_detailXML.@border!="false") {
@@ -244,7 +322,7 @@ package com.danielfreeman.extendedMadness {
 		
 		
 		protected function mouseDown(event:MouseEvent):void {
-			if (!_form.mouseEnabled && mouseX > _listWidth && mouseY > _navigationBar.height) {
+			if (!_form.mouseEnabled && mouseX > _listWidth && mouseY > UINavigationBar.HEIGHT) {
 				_startX = mouseX;
 				stage.addEventListener(MouseEvent.MOUSE_UP, mouseUp);
 				stage.addEventListener(MouseEvent.MOUSE_MOVE, mouseMove);

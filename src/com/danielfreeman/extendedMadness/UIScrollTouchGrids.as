@@ -63,16 +63,18 @@ package com.danielfreeman.extendedMadness {
  *    fixedColumns = "n"
  *    fixedColumnsColours = "#rrggbb, #rrggbb, ..."
  *    slideFixedColumns = "true|false"
+ *    lockSides = "true|false"
+ *    lockTopBottom = "true|false"
  *    alignGridWidths = "true|false"
  *    showPressed = "true|false"
  *    editButton = "true|false"
  *    editButtonColour = "#rrggbb"
  *    longClickEnabled = "true|false"
- *    <title>
- *    <font>
- *    <headerFont>
- *    <model>
- *    <widths> (depreciated)
+ *    &lt;title&gt;
+ *    &lt;font&gt;
+ *    &lt;headerFont&gt;
+ *    &lt;model&gt;
+ *    &lt;widths&gt; (depreciated)
  * /&gt;
  * </pre>
  */
@@ -364,11 +366,7 @@ package com.danielfreeman.extendedMadness {
 			_temporaryRowHighlight.graphics.clear();
 			if (_showPressed && highlightedRowIndex >= 0 && highlightedRowIndex < highlightedDataGrid.numberOfRows) {
 				_temporaryRowHighlight.visible = true;
-			//	var firstCell:UICell = highlightedDataGrid.tableCells[highlightedRowIndex][0];	
 				_temporaryRowHighlight.graphics.beginFill(colour < uint.MAX_VALUE ? colour : _rowSelectColour); //, ALPHA);
-			//	_temporaryRowHighlight.graphics.lineStyle(ROW_BORDER,_rowSelectColour);
-			//	_temporaryRowHighlight.graphics.drawRect(_titleSlider.x, _titleSlider.y + highlightedDataGrid.y + firstCell.y, _slider.getBounds(_slider).right, firstCell.height);
-			//	_temporaryRowHighlight.graphics.drawRect(0, highlightedDataGrid.y + firstCell.y, stage.stageWidth * UI.scale, firstCell.height);
 				_temporaryRowHighlight.graphics.drawRect(0, highlightedDataGrid.y + highlightedDataGrid.rowPosition(highlightedRowIndex), stage.stageWidth * UI.scale, highlightedDataGrid.rowHeight(highlightedRowIndex));
 				_temporaryRowHighlight.graphics.endFill();
 			}
@@ -524,9 +522,6 @@ package com.danielfreeman.extendedMadness {
 		protected function rowSelectHandler():Boolean {
 			var highlightedDataGrid:UISimpleDataGrid = yToDataGrid(_slider.mouseY);
 			var highlightedRowIndex:int = highlightedDataGrid ? highlightedDataGrid.yToRow(highlightedDataGrid.mouseY) : -1;
-			if (!_headerClicked && highlightedDataGrid && highlightedRowIndex < 0) {
-				highlightedRowIndex = (highlightedDataGrid.hasHeader ? 1 : 0);
-			}
 			if (highlightedRowIndex >= 0 && (highlightedDataGrid != _highlightedDataGrid || highlightedRowIndex != _highlightedRowIndex)) {
 				temporaryRowHighlightDraw(highlightedDataGrid, highlightedRowIndex);
 				_highlightedDataGrid = highlightedDataGrid;
@@ -555,7 +550,7 @@ package com.danielfreeman.extendedMadness {
 				pageButton(_downButton, false, false, true);
 				super.mouseDown(event);
 			}
-			else if (event.target.name == HEADER_NAME) {
+			else if (event.target.name == HEADER_NAME || event.target.name == "_titleSlider") {
 				_headerClicked = true;
 				_rowSelect = false;
 				super.mouseDown(event);
@@ -594,6 +589,10 @@ package com.danielfreeman.extendedMadness {
 				resetPageButtons();
 				super.mouseUp(event);
 			}
+			else if (event.target.name == "_titleSlider") {
+				dispatchEvent(new Event(HEADER_CLICKED));
+				super.mouseUp(event);
+			}
 			else if (_headerClicked && event.target.name == HEADER_NAME) {
 				dispatchEvent(new Event(HEADER_CLICKED));
 				super.mouseUp(event);
@@ -605,6 +604,10 @@ package com.danielfreeman.extendedMadness {
 					_rowSelect = false;
 					_noScroll = _originalNoScroll;
 					rowSelectHandler();
+					if (_highlightedDataGrid && _highlightedRowIndex == 0 && _highlightedDataGrid.hasHeader) {
+						dispatchEvent(new Event(HEADER_CLICKED));
+						super.mouseUp(event);
+					}
 					if (!_alt) {
 						if (_editButton) {
 							_editButton.visible = true;
@@ -612,9 +615,11 @@ package com.danielfreeman.extendedMadness {
 						setHighlightRow();
 						slideEditButton(true);
 					}
-					dispatchRowSelected();
-					if (_distance < THRESHOLD) {
-						dispatchEvent(new Event(ROW_CLICKED));
+					if (!_headerClicked) {
+						dispatchRowSelected();
+						if (_distance < THRESHOLD) {
+							dispatchEvent(new Event(ROW_CLICKED));
+						}
 					}
 				}
 				else if (_alt) {
@@ -700,7 +705,7 @@ package com.danielfreeman.extendedMadness {
 			refreshHighlight();
 			positionPageButtons();
 		}
-		
+
 		
 		protected function refreshHighlight():void {
 			temporaryRowClear();

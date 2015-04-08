@@ -63,11 +63,12 @@ package com.danielfreeman.extendedMadness {
  *    fixedColumns = "n"
  *    fixedColumnsColours = "#rrggbb, #rrggbb, ..."
  *    alignGridWidths = "true|false"
- *    <title>
- *    <font>
- *    <headerFont>
- *    <model>
- *    <widths> (depreciated)
+ *    headerLines = "true|false"
+ *    status = "TEXT"
+ *    statusColour = "#rrggbb"
+ *    slideFixedColumns = "true|false"
+ *    lockSides = "true|false"
+ *    lockTopBottom = "true|false"
  * /&gt;
  * </pre>
  */
@@ -96,9 +97,12 @@ package com.danielfreeman.extendedMadness {
 			_headerLines = xml.@headerLines == "true";
 			_alignGridWidths = xml.@alignGridWidths == "true";
 			initialiseLayers(xml);
-			if (xml.statusFont.length() > 0) {
-				_statusFormat = UIe.toTextFormat(xml.statusFont[0], _statusFormat);
-				delete xml.statusFont;
+		//	if (xml.statusFont.length() > 0) {
+		//		_statusFormat = UIe.toTextFormat(xml.statusFont[0], _statusFormat);
+		//		delete xml.statusFont;
+		//	}
+			if (xml.@statusColour.length() > 0) {
+				_statusFormat = new TextFormat(null, null, UI.toColourValue(xml.@statusColour));
 			}
 			super(screen, xml, attributes);
 			this.setChildIndex(_slider, 0);
@@ -122,7 +126,7 @@ package com.danielfreeman.extendedMadness {
  * Set status label at top-right of datagrids
  */
 		public function set status(value:String):void {
-			_status.text = value;
+			_status.xmlText = value;
 			_status.x = attributes.width - _status.width;
 		}
 
@@ -216,15 +220,15 @@ package com.danielfreeman.extendedMadness {
 		protected function sliceAllTables():void {
 			for (var i:int = 0; i < _slider.numChildren; i++) {
 				var child:DisplayObject = _slider.getChildAt(i);
-				if (child is UISpecialDataGrid) {
+				if (child is UISimpleDataGrid) {
 					if (i < _fixedColumnLayers.length) {
-						_fixedColumnLayers[i].visible = UISpecialDataGrid(child).includeInLayout;
+						_fixedColumnLayers[i].visible = UISimpleDataGrid(child).includeInLayout;
 					}
-					if (UISpecialDataGrid(child).titleCell) {
-						UISpecialDataGrid(child).titleCell.visible = UISpecialDataGrid(child).includeInLayout;					
+					if (UISimpleDataGrid(child).titleCell) {
+						UISimpleDataGrid(child).titleCell.visible = UISimpleDataGrid(child).includeInLayout;					
 					}
-					if (UISpecialDataGrid(child).includeInLayout) {
-						sliceTables(UISpecialDataGrid(child), i);
+					if (UISimpleDataGrid(child).includeInLayout) {
+						sliceTables(UISimpleDataGrid(child), i);
 					}
 					
 				}
@@ -247,6 +251,7 @@ package com.danielfreeman.extendedMadness {
 			copyText.backgroundColor = colour == uint.MAX_VALUE ? source.backgroundColor : colour;
 			copyText.background = colour == uint.MAX_VALUE ? source.background : true;
 			copyText.y = yPosition;
+			copyText.borderColor = source.borderColor;
 			copyText.border = source.border;
 			return copyText;
 		}
@@ -580,12 +585,17 @@ package com.danielfreeman.extendedMadness {
  * Find a particular row,column (group) inside the grid
  */
 		override public function findViewById(id:String, row:int = -1, group:int = -1):DisplayObject {
-			for each (var dataGrid:UISimpleDataGrid in _dataGrids) {
-				if (dataGrid.name == id) {
-					return (row < 0 && group < 0) ? dataGrid : dataGrid.findViewById(id, row, group);
-				}
+			if (id == "") {
+				return _status;
 			}
-			return null;
+			else {
+				for each (var dataGrid:UISimpleDataGrid in _dataGrids) {
+					if (dataGrid.name == id) {
+						return (row < 0 && group < 0) ? dataGrid : dataGrid.findViewById(id, row, group);
+					}
+				}
+				return null;
+			}
 		}
 		
 		

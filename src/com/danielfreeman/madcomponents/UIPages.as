@@ -62,6 +62,11 @@ package com.danielfreeman.madcomponents {
  *    alignV = "top|bottom|centre|fill"
  *    border = "true|false"
  *    mask = "true|false"
+ *    lazyRender = "true|false"
+ *    recycle = "true|false"
+ *    easeIn = "NUMBER"
+ *    easeOut = "NUMBER"
+ *    slideOver = "true|false"
  * /&gt;
  * </pre>
  */
@@ -132,10 +137,11 @@ package com.danielfreeman.madcomponents {
 			
 			screen.addChildAt(this,0);
 			var children:XMLList = xml.children();
+			var index:int = 0;
 			for each (var child0:XML in children) if (child0.nodeKind() != "text" && child0.localName()!="data") {
 				var childstr:String = child0.toXMLString();
 				var child:XML = XML('<page lazyRender="'+(xml.@lazyRender)+'" recycle="'+(xml.@recycle)+'">'+childstr+'</page>');
-				var newAttributes:Attributes = _attributes.copy();
+				var newAttributes:Attributes = childAttributes(index++);
 				newAttributes.parse(child0);
 				if (child0.@border!="false") {
 					addPadding(child0.localName(), newAttributes);
@@ -143,7 +149,8 @@ package com.danielfreeman.madcomponents {
 				var page:* = new UI.FormClass(this, child, newAttributes);
 				_attributes.position(page);
 				page.name = "+";
-				page.visible = false;
+			//	page.visible = false;
+				setVisible(page, false);
 				_pages.push(page);
 			}
 			setInitialPage();
@@ -154,6 +161,21 @@ package com.danielfreeman.madcomponents {
 			
 			startMasking();
 			drawShade();
+		}
+		
+		
+		protected function childAttributes(index:int):Attributes {
+			return _attributes.copy();
+		}
+		
+		
+		public function setVisible(page:DisplayObject, value:Boolean):void {
+			if (page is MadSprite) {
+				MadSprite(page).isVisible = value;
+			}
+			else {
+				page.visible = value;
+			}
 		}
 		
 /**
@@ -172,7 +194,8 @@ package com.danielfreeman.madcomponents {
 			if (_pages.length>0) {
 				_thisPage = _pages[0];
 				_page = 0;
-				_thisPage.visible = true;
+			//	_thisPage.visible = true;
+				setVisible(_thisPage, true);
 			}
 		}
 		
@@ -197,28 +220,27 @@ package com.danielfreeman.madcomponents {
 				return;
 			}
 			var children:XMLList = _xml.children();
-			var idx:int = 0;
 			super.layout(attributes.copy(_xml));
 			UI.drawBackgroundColour(_attributes.backgroundColours, _attributes.width, _attributes.y + _attributes.height, this);
 			_attributes.x=0;_attributes.y=0;
-			for (var i:int = 0; i<children.length(); i++) {
+			for (var i:int = 0; i < children.length(); i++) {
 				var childXML:XML = children[i];
 				if (childXML.localName()!="data" && childXML.nodeKind() != "text") {
 				//	var child:XML = XML("<page>"+childXML.toXMLString()+"</page>");
-					var newAttributes:Attributes = _attributes.copy();
+					var newAttributes:Attributes = childAttributes(i);
 					newAttributes.parse(childXML);
 					if (childXML.@border!="false") {
-						addPadding(childXML.localName(),newAttributes);
+						addPadding(childXML.localName(), newAttributes);
 					}
-					var page:IContainerUI = _pages[idx];
+					var page:IContainerUI = _pages[i];
 					page.layout(newAttributes);
+					
 					if (page == _drawer) {
 						_drawer.y = _attributes.height  + _attributes.y - _drawerHeight;
 					}
 					else {
 						_attributes.position(DisplayObject(page));
 					}
-					idx++;
 				}
 			}
 		//	if (scrollRect)
@@ -250,7 +272,8 @@ package com.danielfreeman.madcomponents {
 				_lastPage = _pages[_page];
 				_page++;
 				_thisPage = _pages[_page];
-				_thisPage.visible = true;
+			//	_thisPage.visible = true;
+				setVisible(_thisPage, true);
 				doTransition(transition);
 			}
 		}
@@ -264,7 +287,8 @@ package com.danielfreeman.madcomponents {
 				_lastPage = _pages[_page];
 				_page--;
 				_thisPage = _pages[_page];
-				_thisPage.visible = true;
+			//	_thisPage.visible = true;
+				setVisible(_thisPage, true);
 				doTransition(transition);
 			}
 		}
@@ -274,8 +298,9 @@ package com.danielfreeman.madcomponents {
  */	
 		public function attachPages(pages:Array, alt:Boolean = false):void {
 			_pages = pages;
-			for (var i:int = 1; i<pages.length; i++)
-				DisplayObject(pages[i]).visible = false;
+			for (var i:int = 1; i<pages.length; i++) {
+				setVisible(pages[i], false);
+			}
 		}
 		
 /**
@@ -312,7 +337,8 @@ package com.danielfreeman.madcomponents {
 									startSlide((_attributes.height + _attributes.y)/STEPS);
 									_drawer = null;
 									break;
-				default:			_lastPage.visible = false;
+				default:		//	_lastPage.visible = false;
+									setVisible(_lastPage, false);
 									_lastPage = null;
 									dispatchEvent(new Event(Event.CHANGE));
 									dispatchEvent(new Event(COMPLETE));
@@ -390,7 +416,8 @@ package com.danielfreeman.madcomponents {
 			_slideTimer.stop();
 		//	_thisPage.cacheAsBitmap=false;
 			if (_transition == SLIDE_DOWN || _transition == DRAWER_DOWN) {
-				_thisPage.visible = false;
+			//	_thisPage.visible = false;
+				setVisible(_thisPage, false);
 			}
 			else if (_transition != SLIDE_UP && _transition != DRAWER_UP) {
 				removeLastPage();
@@ -430,11 +457,17 @@ package com.danielfreeman.madcomponents {
 			}
 		}
 		
+		
+		public function doLayout():void {
+			layout(attributes);
+		}
+		
 /**
  *  Make the previous page invisible
  */	
 		protected function removeLastPage():void {
-			_lastPage.visible = false;
+		//	_lastPage.visible = false;
+			setVisible(_lastPage, false);
 			_lastPage = null;
 		}
 		
@@ -448,7 +481,8 @@ package com.danielfreeman.madcomponents {
 			_lastPage = _pages[_page];
 			_page = page;
 			_thisPage = _pages[_page];
-			_thisPage.visible = true;
+		//	_thisPage.visible = true;
+			setVisible(_thisPage, true);
 			doTransition(transition);
 		}
 		
@@ -521,6 +555,7 @@ package com.danielfreeman.madcomponents {
 		
 		
 		public function drawComponent():void {	
+		//	graphics.clear(); ?
 		}
 		
 		

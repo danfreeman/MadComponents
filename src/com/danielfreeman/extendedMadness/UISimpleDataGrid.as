@@ -48,15 +48,16 @@ package com.danielfreeman.extendedMadness {
  *    widths = "i(%),j(%),k(%)…"
  *    titleBarColour = "#rrggbb"
  *    recycle = "true|false|shared"
- *    <title>
- *    <font>
- *    <headerFont>
- *    <titleFont>
- *    <header>
- *    <data>
- *    	<header>
- *    </data>
- *    <widths> (depreciated)
+ *    headerLines = "true|false"
+ *    &lt;title/&gt;
+ *    &lt;font/&gt;
+ *    &lt;headerFont/&gt;
+ *    &lt;titleFont/&gt;
+ *    &lt;header/&gt;
+ *    &lt;data&gt;
+ *    	&lt;header/&gt;
+ *    &lt;/data&gt;
+ *    &lt;widths/&gt; (depreciated)
  * /&gt;
  * </pre>
  */
@@ -105,6 +106,7 @@ package com.danielfreeman.extendedMadness {
 		protected var _newData:Boolean = false;
 		
 		protected var _rowPositions:Vector.<Number>;
+		protected var _headerLines:Boolean = false;
 
 
 		public function UISimpleDataGrid(screen:Sprite, xml:XML, attributes:Attributes) {							   
@@ -112,8 +114,8 @@ package com.danielfreeman.extendedMadness {
 			x=attributes.x;
 			y=attributes.y;
 
-			_border = xml.@lines.length() == 0 || xml.@lines == "true";
-			
+			var saveBorder:Boolean = _border = xml.@lines.length() == 0 || xml.@lines == "true";
+			_headerLines = xml.@headerLines == "true";
 			_tableWidth = attributes.width;
 			_leftMargin = 4.0;
 			
@@ -167,6 +169,7 @@ package com.danielfreeman.extendedMadness {
 			}
 			if (_headerText) {
 				_hasHeader = true;
+				_border = _headerLines;
 				makeTable([_headerText], _headerStyle);
 			}
 			if (attributes.backgroundColours.length>1) {
@@ -181,6 +184,7 @@ package com.danielfreeman.extendedMadness {
 			}
 			_dataStyle.leftMargin = _leftMargin;
 			_headerStyle.leftMargin = 0;
+			_border = saveBorder;
 			makeTable(_data, _dataStyle);
 			doLayout();
 		//	drawBackground();
@@ -190,9 +194,12 @@ package com.danielfreeman.extendedMadness {
 		public function set newData(value:Array):void {
 			_data = value;
 			_newData = true;
+			var saveBorder:Boolean = _border;
 			clear();
 			if (_hasHeader) {
+				_border = _headerLines;
 				makeTable([value[0]], _headerStyle);
+				_border = saveBorder;
 				makeTable(value.slice(1), _dataStyle);
 			}
 			else {
@@ -309,10 +316,16 @@ package com.danielfreeman.extendedMadness {
 		
 		protected function verticalGridLines():void {
 			var sum:Number = 0;
+			var offset:Number = 0;
+			if (!_headerLines) {
+				var lastRow:Vector.<UICell> = _table[_table.length - 1];
+				var dataCell:UICell = lastRow[lastRow.length - 1];
+				offset = Math.round(dataCell.y);
+			}
 			for each (var width:Number in _columnWidths) {
 				sum += width;
 				graphics.beginFill(_borderColour);
-				graphics.drawRect(Math.round(sum), 0, LINE_THICKNESS, height);
+				graphics.drawRect(Math.round(sum), offset, LINE_THICKNESS, getBounds(this).bottom - offset);
 				graphics.endFill();
 			}
 		}
@@ -527,8 +540,8 @@ package com.danielfreeman.extendedMadness {
  */
 		public function yToRow(y:Number):int {// Need to override
 			var result:int = -1;
-			if (numberOfRows > 0 && y > 0 && y <= height) {
-				result = Math.min(Math.floor(numberOfRows * (y - _title.height) / (height - _title.height)), numberOfRows - 1);
+			if (numberOfRows > 0 && y > 0 && y <= theHeight) {
+				result = Math.min(Math.floor(numberOfRows * (y - _title.height) / (theHeight - _title.height)), numberOfRows - 1);
 				var top:Number = rowPosition(result);
 				if (y < top) {
 					result--;
@@ -552,7 +565,8 @@ package com.danielfreeman.extendedMadness {
 					}
 				}
 			}
-			return (hasHeader && result == 0) ? -1 : result;
+			return result;
+		//	return (hasHeader && result == 0) ? -1 : result;
 		}
 		
 		
@@ -718,7 +732,7 @@ package com.danielfreeman.extendedMadness {
 		}
 		
 		
-		override public function get height():Number {
+		override public function get theHeight():Number {
 			return getBounds(this).bottom;
 		}
 		

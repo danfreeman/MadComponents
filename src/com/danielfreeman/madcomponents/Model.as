@@ -159,7 +159,7 @@ package com.danielfreeman.madcomponents {
 		public static function addSlashes(value:String):String {
 			value = value.replace(/\"/g, '\\"');
 			value = value.replace(/\'/g, "\\'");
-			return value.replace(/[^\x{20}-\x{7E}\s\t\n\r]/g,"");
+			return value.replace(/[\x{00}-\x{0C}\x{0E}-\x{1F}\t]/g," ");
 		}
 		
 /**
@@ -252,7 +252,7 @@ package com.danielfreeman.madcomponents {
  */	
 		public function set dataAMF(value:*):void {
 			_amfData = value;
-			if (_path!="" && value)
+			if (_path != "" && value)
 				value = followPath(value, _path);
 			if (_parent is UIList) {
 				if (_schema == null) {
@@ -261,7 +261,10 @@ package com.danielfreeman.madcomponents {
 				else {
 					var arrayOfObjects:Array = [];
 					for each (var record:Object in value) {
-						arrayOfObjects.push(parseAMFlist(record, _schema.parent(), new Object()));
+						var item:Object = parseAMFlist(record, _schema.parent(), new Object());
+						if (item) {
+							arrayOfObjects.push(item);
+						}
 					}
 					UIList(_parent).data = arrayOfObjects;
 				}
@@ -297,8 +300,9 @@ package com.danielfreeman.madcomponents {
 				var field:String = child.localName().toString();
 				var pathChild:String = path+"."+field;
 				if (child.hasSimpleContent()) {
-					if (child.toString() != "")
+					if (child.toString() != "") {
 						field = child.toString();
+					}
 					var head:String = result[field];
 					result[field] = (head ? head+" " : "") + String(record[pathChild.substr(1)]);
 				}
@@ -360,7 +364,8 @@ package com.danielfreeman.madcomponents {
  * JSON data loaded handler
  */	
 		protected function jsonIsLoaded(event:Event):void {
-			dataAMF = com.danielfreeman.madcomponents.TinyJSON.parse(data);
+		//	dataAMF = com.danielfreeman.madcomponents.TinyJSON.parse(data);
+			dataAMF = JSON.parse(data);
 			dispatchEvent(new Event(LOADED));
 			removeEventListener(Event.COMPLETE, jsonIsLoaded);
 		}
@@ -415,7 +420,6 @@ package com.danielfreeman.madcomponents {
 				if (items.length()>1) {
 					result = [];
 					var schemaGrandChildren:XMLList = schemaChildren.children();
-				//	trace("schemaChildren=",schemaChildren);
 					for each (var item:XML in items) {
 						if (schema.child(item.localName()).length() > 0) {
 							var rowResult:Object = listObject(item, schemaGrandChildren);

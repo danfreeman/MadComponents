@@ -41,6 +41,9 @@ package com.danielfreeman.extendedMadness
  *    palette = "#rrggbb, #rrggbb, ..."
  *    paletteStart = "n"
  *    order = "rows|columns"
+ *    increment = "NUMBER"
+ *    minimum = "NUMBER"
+ *    maximum = "NUMBER"
  * /&gt;
  * </pre>
  * */	

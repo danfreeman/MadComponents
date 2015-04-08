@@ -25,6 +25,9 @@ package com.danielfreeman.madcomponents {
  *    alt = "true|false"
  *    pixelSnapping = "true|false"
  *    iconOffset = "NUMBER"
+ *    style7 = "true|false"
+ *    lazyRender = "true|false"
+ *    recycle = "true|false"
  * /&gt;
  * </pre>
  */
@@ -38,23 +41,45 @@ package com.danielfreeman.madcomponents {
 		protected var _mouseDownTarget:UITabButton = null;
 		protected var _colour:uint;
 		protected var _alt:Boolean;
+		protected var _fullPageAttributes:Attributes;
 		protected var _pagesAttributes:Attributes;
 		protected var _pixelSnapping:Boolean;
 		protected var _iconOffset:Number = 0;
+		protected var _fullPage:Array = [];
 		
 
 		public function UITabPages(screen:Sprite, xml:XML, attributes:Attributes) {
-			_attributes = attributes;
+			_fullPageAttributes = _attributes = attributes;
 			_colour = attributes.colour;
 			_alt = xml.@alt == "true";
 			_pixelSnapping = xml.@pixelSnapping == "true" || (xml.data && xml.data.length() > 0);
 			_iconOffset = xml.@iconOffset.length() > 0 ? parseFloat(xml.@iconOffset) : 0;
 			initialiseButtonBar(xml, attributes);
+			for each (var child:XML in xml.children()) {
+				_fullPage.push(child.@fullPage == "true");
+			}
 			super(screen, xml, attributes);
 			_buttonBar.addEventListener(MouseEvent.MOUSE_DOWN, mouseDown);			
 			_buttonBar.addEventListener(MouseEvent.MOUSE_UP, mouseUp);
 			setChildIndex(_buttonBar, numChildren-1);
 			extractData(xml);
+		}
+		
+		
+		public function get fullPage():Boolean {
+			return _fullPage[_page];
+		}
+		
+		
+		public function set fullPage(value:Boolean):void {
+			_fullPage[_page] = value;
+			_buttonBar.visible = !value;
+			doLayout();
+		}
+		
+		
+		public function get buttonBar():Sprite {
+			return _buttonBar;
 		}
 		
 		
@@ -187,6 +212,16 @@ package com.danielfreeman.madcomponents {
 		}
 		
 		
+		override public function goToPage(page:int, transition:String = ""):void {
+			super.goToPage(page, transition);
+			_buttonBar.visible = !_fullPage[page];
+			if (!_buttonBar.visible) {
+				_thisPage.y = 0;
+			}
+		}
+		
+		
+		
 		protected function mouseUp(event:MouseEvent):void {
 			if (_mouseDownTarget && event.target == _mouseDownTarget) {
 				goToPage(parseInt(event.target.name));
@@ -217,6 +252,7 @@ package com.danielfreeman.madcomponents {
  *  Rearrange the layout to new screen dimensions
  */	
 		override public function layout(attributes:Attributes):void {
+			_fullPageAttributes = attributes;
 			_pagesAttributes = attributes.copy();
 			_pagesAttributes.height -= _buttonBar.height - (_alt ? 1 : TWEAK);
 			_buttonBar.y = _pagesAttributes.height;
@@ -229,11 +265,9 @@ package com.danielfreeman.madcomponents {
 			}
 			drawTabButtonBackground();
 			_attributes = attributes;
-		}
-		
-		
-		public function doLayout():void {
-			layout(_attributes);
+			if (_thisPage && !_buttonBar.visible) {
+				_thisPage.y = 0;
+			}
 		}
 		
 /**
@@ -242,7 +276,7 @@ package com.danielfreeman.madcomponents {
 		override public function attachPages(pages:Array, alt:Boolean = false):void {
 			super.attachPages(pages, alt);
 			makeTabButtons(_attributes, pages.length, alt);
-			_buttonBar.y = attributes.height + (alt ? 1 : TWEAK);
+			_buttonBar.y = _attributes.height + (alt ? 1 : TWEAK);
 		}
 
 
@@ -251,7 +285,22 @@ package com.danielfreeman.madcomponents {
 				var button:UITabButton = UITabButton(_buttonBar.getChildAt(i));
 				button.state = (i == value);
 			}
-			super.goToPage(value);
+			goToPage(value);
+		}
+		
+		
+		override public function get attributes():Attributes {
+			return _fullPageAttributes;
+		}
+		
+
+		override protected function childAttributes(index:int):Attributes {
+			if (_fullPage[index]) {
+				return _fullPageAttributes.copy();
+			}
+			else {
+				return _pagesAttributes.copy();
+			}
 		}
 
 

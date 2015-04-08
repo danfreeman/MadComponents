@@ -36,7 +36,7 @@ package com.danielfreeman.extendedMadness
 	import flash.display.PixelSnapping;
 
 /**
- *  Image placeholder
+ *  This component is depreciated.  Use <image> with data for screen density matched images. ******
  * <pre>
  * &lt;imageX
  *    id = "IDENTIFIER"

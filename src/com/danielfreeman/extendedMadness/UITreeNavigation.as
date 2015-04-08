@@ -25,6 +25,7 @@
 
 package com.danielfreeman.extendedMadness
 {
+	import com.danielfreeman.madcomponents.UINavigationBar;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
@@ -54,6 +55,11 @@ package com.danielfreeman.extendedMadness
  *    border = "true|false"
  *    mask = "true|false"
  *    backToExit = "true|false"
+ *    lazyRender = "true|false"
+ *    recycle = "true|false"
+ *    easeIn = "NUMBER"
+ *    easeOut = "NUMBER"
+ *    slideOver = "true|false"
  * /&gt;
  * </pre>
  */	
@@ -77,7 +83,7 @@ package com.danielfreeman.extendedMadness
 				_treePointer = _data = xml.data[0];
 				forwardTree(_data);
 				if (_thisPage)
-					_thisPage.y = _navigationBar.height;
+					_thisPage.y = UINavigationBar.HEIGHT;
 			}
 			setChildIndex(_navigationBar, numChildren-1);
 		}
@@ -86,8 +92,8 @@ package com.danielfreeman.extendedMadness
 		override public function layout(attributes:Attributes):void {
 			super.layout(attributes);
 			var copyAttributes:Attributes = attributes.copy();
-			copyAttributes.height-= 2*_navigationBar.height; //Why ?
-			copyAttributes.y+=_navigationBar.height;
+			copyAttributes.height-= 2*UINavigationBar.HEIGHT; //Why ?
+			copyAttributes.y+=UINavigationBar.HEIGHT;
 			copyAttributes.parse(_xml);
 			for each (var list:UIList in _treeLists) {
 				list.layout(copyAttributes);

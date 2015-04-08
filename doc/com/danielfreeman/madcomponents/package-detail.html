@@ -77,7 +77,17 @@ Contains properties such as the colours, width, height, padding, and dimensions 
  /&gt;
  
  </td></tr><tr class="prow0"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="UIButtonX.html">UIButtonX</a></td><td class="summaryTableLastCol">
-	 &nbsp;</td></tr><tr class="prow1"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="UIContainerBaseClass.html">UIContainerBaseClass</a></td><td class="summaryTableLastCol">&nbsp;</td></tr><tr class="prow0"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="UIDividedList.html">UIDividedList</a></td><td class="summaryTableLastCol">
+	 &nbsp;</td></tr><tr class="prow1"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="UICircular.html">UICircular</a></td><td class="summaryTableLastCol">
+  MadComponents circular container
+ 
+ &lt;circular
+   id = "IDENTIFIER"
+   background = "#rrggbb, #rrggbb, ..."
+   alignH = "left|right|centre|fill"
+   alignV = "top|bottom|centre"
+ /&gt;
+ 
+ </td></tr><tr class="prow0"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="UIContainerBaseClass.html">UIContainerBaseClass</a></td><td class="summaryTableLastCol">&nbsp;</td></tr><tr class="prow1"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="UIDividedList.html">UIDividedList</a></td><td class="summaryTableLastCol">
  MadComponents divided list
  
  &lt;dividedList
@@ -100,30 +110,32 @@ Contains properties such as the colours, width, height, padding, and dimensions 
     headingTextColour = "#rrggbb"
     headingShadowColour = "#rrggbb"
     headingHeight = "NUMBER"
+    labelField = "IDENTIFIER"
+    lineGap = "NUMBER"
  /&gt;
  
- </td></tr><tr class="prow1"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="UIForm.html">UIForm</a></td><td class="summaryTableLastCol">
- UIForm is for horizontal, vertical, group, clickableGroup, columns, rows, and frame containers
- 
- &lt;horizontal|vertical|columns|rows|group|clickableGroup|frame
-    id = "IDENTIFIER"
-    colour = "#rrggbb"
-    background = "#rrggbb, #rrggbb, ..."
-    gapV = "NUMBER"
-    gapH = "NUMBER"
-    alignH = "left|right|centre|fill"
-    alignV = "top|bottom|centre|fill"
-    visible = "true|false"
-    lines = "true|false"
-    widths = "i(%),j(%),k(%)…"
-    heights = "i(%),j(%),k(%)…"
-    pickerHeight = "NUMBER"
-    border = "true|false"
-    autoLayout = "true|false"
-    lazyRender = "true|false"
- /&gt;
- 
- </td></tr><tr class="prow0"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="UIGroupedList.html">UIGroupedList</a></td><td class="summaryTableLastCol">
+ </td></tr><tr class="prow0"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="UIForm.html">UIForm</a></td><td class="summaryTableLastCol">
+	 UIForm is for horizontal, vertical, group, clickableGroup, columns, rows, and frame containers
+	 
+	 &lt;horizontal|vertical|columns|rows|group|clickableGroup|frame
+	    id = "IDENTIFIER"
+	    colour = "#rrggbb"
+	    background = "#rrggbb, #rrggbb, ..."
+	    gapV = "NUMBER"
+	    gapH = "NUMBER"
+	    alignH = "left|right|centre|fill"
+	    alignV = "top|bottom|centre|fill"
+	    visible = "true|false"
+	    lines = "true|false"
+	    widths = "i(%),j(%),k(%)…"
+	    heights = "i(%),j(%),k(%)…"
+	    pickerHeight = "NUMBER"
+	    border = "true|false"
+	    autoLayout = "true|false"
+	    lazyRender = "true|false"
+	 /&gt;
+	 
+	 </td></tr><tr class="prow1"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="UIGroupedList.html">UIGroupedList</a></td><td class="summaryTableLastCol">
   MadComponents Grouped List
  
  &lt;groupedList
@@ -144,9 +156,13 @@ Contains properties such as the colours, width, height, padding, and dimensions 
     autoLayout = "true|false"
     headingTextColour = "#rrggbb"
     headingShadowColour = "#rrggbb"
+    arrows = "true|false"
+    labelField = "STRING"
+    lineGap = "NUMBER"
+    style7 = "true|false"
  /&gt;
  
- </td></tr><tr class="prow1"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="UIImage.html">UIImage</a></td><td class="summaryTableLastCol">
+ </td></tr><tr class="prow0"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="UIImage.html">UIImage</a></td><td class="summaryTableLastCol">
   Image placeholder
  
  &lt;image
@@ -158,9 +174,13 @@ Contains properties such as the colours, width, height, padding, and dimensions 
     height = "NUMBER"
     clickable = "true|false"
     scale = "true|false"
+    border = "true|false|rounded"
+    background = "#rrggbb"
+    stretch = "true|false"
+    alpha = "true|false"
  /&gt;
  
- </td></tr><tr class="prow0"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="UIImageLoader.html">UIImageLoader</a></td><td class="summaryTableLastCol">
+ </td></tr><tr class="prow1"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="UIImageLoader.html">UIImageLoader</a></td><td class="summaryTableLastCol">
   Image placeholder for image set via URL
  
  &lt;imageLoader
@@ -173,10 +193,14 @@ Contains properties such as the colours, width, height, padding, and dimensions 
     base = "URL"
     clickable = "true|false"
     cache = "true|false"
+    queue = "true|false"
     scale = "true|false"
+    border = "true|false|rounded"
+    background = "#rrggbb"
+    stretch = "true|false"
  /&gt;
  
- </td></tr><tr class="prow1"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="UIInput.html">UIInput</a></td><td class="summaryTableLastCol">
+ </td></tr><tr class="prow0"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="UIInput.html">UIInput</a></td><td class="summaryTableLastCol">
   Input component
  
  &lt;input
@@ -193,8 +217,8 @@ Contains properties such as the colours, width, height, padding, and dimensions 
    password = "true|false"
  /&gt;
  
- </td></tr><tr class="prow0"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="UIInputX.html">UIInputX</a></td><td class="summaryTableLastCol">
-	 &nbsp;</td></tr><tr class="prow1"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="UILabel.html">UILabel</a></td><td class="summaryTableLastCol">
+ </td></tr><tr class="prow1"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="UIInputX.html">UIInputX</a></td><td class="summaryTableLastCol">
+	 &nbsp;</td></tr><tr class="prow0"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="UILabel.html">UILabel</a></td><td class="summaryTableLastCol">
   MadComponents label
  
  &lt;label
@@ -208,8 +232,8 @@ Contains properties such as the colours, width, height, padding, and dimensions 
    embedFonts = "true|false"
  /&gt;
  
- </td></tr><tr class="prow0"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="UILabelX.html">UILabelX</a></td><td class="summaryTableLastCol">
-	 &nbsp;</td></tr><tr class="prow1"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="UIList.html">UIList</a></td><td class="summaryTableLastCol">
+ </td></tr><tr class="prow1"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="UILabelX.html">UILabelX</a></td><td class="summaryTableLastCol">
+	 &nbsp;</td></tr><tr class="prow0"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="UIList.html">UIList</a></td><td class="summaryTableLastCol">
   MadComponents List
  
  &lt;list
@@ -232,11 +256,12 @@ Contains properties such as the colours, width, height, padding, and dimensions 
     mask = "true|false"
     alignV = "scroll|no scroll"
     labelField = "IDENTIFIER"
-    arrow = "true|false"
+    arrows = "true|false"
     lineGap = "NUMBER"
+   style7 = "true|false"
  /&gt;
  
- </td></tr><tr class="prow0"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="UILongList.html">UILongList</a></td><td class="summaryTableLastCol">
+ </td></tr><tr class="prow1"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="UILongList.html">UILongList</a></td><td class="summaryTableLastCol">
  List with rows lazy rendered when in view
  
  &lt;longList
@@ -261,7 +286,7 @@ Contains properties such as the colours, width, height, padding, and dimensions 
  
  
  Note that autoLayout="true" is not supported by UILongList
- </td></tr><tr class="prow1"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="UINavigation.html">UINavigation</a></td><td class="summaryTableLastCol">
+ </td></tr><tr class="prow0"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="UINavigation.html">UINavigation</a></td><td class="summaryTableLastCol">
   MadComponents navigation controller
  
  &lt;navigation
@@ -289,11 +314,16 @@ Contains properties such as the colours, width, height, padding, and dimensions 
     autoForward = "true|false"
     backKey = "true|false"
     style7 = "true|false"
+    lazyRender = "true|false"
+    recycle = "true|false"
+    easeIn = "NUMBER"
+    easeOut = "NUMBER"
+    slideOver = "true|false"
  /&gt;
  
- </td></tr><tr class="prow0"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="UINavigationBar.html">UINavigationBar</a></td><td class="summaryTableLastCol">
+ </td></tr><tr class="prow1"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="UINavigationBar.html">UINavigationBar</a></td><td class="summaryTableLastCol">
   MadComponents Navigation Bar
- </td></tr><tr class="prow1"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="UINavigationPages.html">UINavigationPages</a></td><td class="summaryTableLastCol">&nbsp;</td></tr><tr class="prow0"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="UIPages.html">UIPages</a></td><td class="summaryTableLastCol">
+ </td></tr><tr class="prow0"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="UINavigationPages.html">UINavigationPages</a></td><td class="summaryTableLastCol">&nbsp;</td></tr><tr class="prow1"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="UIPages.html">UIPages</a></td><td class="summaryTableLastCol">
   MadComponents pages container
  
  &lt;pages
@@ -309,9 +339,14 @@ Contains properties such as the colours, width, height, padding, and dimensions 
     alignV = "top|bottom|centre|fill"
     border = "true|false"
     mask = "true|false"
+    lazyRender = "true|false"
+    recycle = "true|false"
+    easeIn = "NUMBER"
+    easeOut = "NUMBER"
+    slideOver = "true|false"
  /&gt;
  
- </td></tr><tr class="prow1"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="UIPicker.html">UIPicker</a></td><td class="summaryTableLastCol">
+ </td></tr><tr class="prow0"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="UIPicker.html">UIPicker</a></td><td class="summaryTableLastCol">
   MadComponents picker component
  
  &lt;picker
@@ -330,9 +365,38 @@ Contains properties such as the colours, width, height, padding, and dimensions 
     jogable = "true|false"
  /&gt;
  
+ </td></tr><tr class="prow1"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="UIPickerView.html">UIPickerView</a></td><td class="summaryTableLastCol">
+  Image placeholder
+ 
+ &lt;image
+    id = "IDENTIFIER"
+    alignH = "left|right|centre|fill"
+    alignV = "top|bottom|centre|fill"
+    visible = "true|false"
+    width = "NUMBER"
+    height = "NUMBER"
+    clickable = "true|false"
+    scale = "true|false"
+    border = "true|false|rounded"
+    background = "#rrggbb"
+    stretch = "true|false"
+ /&gt;
+ 
  </td></tr><tr class="prow0"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="UIRefresh.html">UIRefresh</a></td><td class="summaryTableLastCol">
   MadComponents "Pull down to refresh" item above lists
- </td></tr><tr class="prow1"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="UIRenderer.html">UIRenderer</a></td><td class="summaryTableLastCol">&nbsp;</td></tr><tr class="prow0"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="UIScrollVertical.html">UIScrollVertical</a></td><td class="summaryTableLastCol">
+ </td></tr><tr class="prow1"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="UIRenderer.html">UIRenderer</a></td><td class="summaryTableLastCol">
+  MadComponents renderer
+ 
+ &lt;navigation
+    id = "IDENTIFIER"
+    colour = "#rrggbb"
+    background = "#rrggbb, #rrggbb, ..."
+    visible = "true|false"
+    gapV = "NUMBER"
+    gapH = "NUMBER"
+    style7 = "true|false"
+ 
+ </td></tr><tr class="prow0"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="UIScrollVertical.html">UIScrollVertical</a></td><td class="summaryTableLastCol">
   MadComponents vertically scrolling container
  
  &lt;scrollVertical
@@ -366,6 +430,7 @@ Contains properties such as the colours, width, height, padding, and dimensions 
    field = "IDENTIFIER"
    begins = "true|false"
    clearButton = "true|false"
+   style7 = "true|false"
  /&gt;
  
  </td></tr><tr class="prow0"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="UISlider.html">UISlider</a></td><td class="summaryTableLastCol">
@@ -385,9 +450,41 @@ Contains properties such as the colours, width, height, padding, and dimensions 
  /&gt;
  
  </td></tr><tr class="prow1"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="UISliderX.html">UISliderX</a></td><td class="summaryTableLastCol">
-	 &nbsp;</td></tr><tr class="prow0"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="UISwitch.html">UISwitch</a></td><td class="summaryTableLastCol">&nbsp;</td></tr><tr class="prow1"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="UITabButton.html">UITabButton</a></td><td class="summaryTableLastCol">
+  MadComponent slider
+ 
+ &lt;slider
+   id = "IDENTIFIER"
+   background = "#rrggbb, #rrggbb, ..."
+   alignH = "left|right|centre|fill"
+   alignV = "top|bottom|centre"
+   visible = "true|false"
+   clickable = "true|false"
+   width = "NUMBER"
+   alt = "true|false"
+   value = "NUMBER"
+   curve = "NUMBER"
+ /&gt;
+ 
+ </td></tr><tr class="prow0"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="UISpacer.html">UISpacer</a></td><td class="summaryTableLastCol">
+  Image placeholder
+ 
+ &lt;image
+    id = "IDENTIFIER"
+    alignH = "left|right|centre|fill"
+    alignV = "top|bottom|centre|fill"
+    visible = "true|false"
+    width = "NUMBER"
+    height = "NUMBER"
+    clickable = "true|false"
+    scale = "true|false"
+    border = "true|false|rounded"
+    background = "#rrggbb"
+    stretch = "true|false"
+ /&gt;
+ 
+ </td></tr><tr class="prow1"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="UISwitch.html">UISwitch</a></td><td class="summaryTableLastCol">&nbsp;</td></tr><tr class="prow0"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="UITabButton.html">UITabButton</a></td><td class="summaryTableLastCol">
   Button for MadComponents tab bar
- </td></tr><tr class="prow0"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="UITabPages.html">UITabPages</a></td><td class="summaryTableLastCol">
+ </td></tr><tr class="prow1"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="UITabPages.html">UITabPages</a></td><td class="summaryTableLastCol">
   MadComponents tabbed pages container
  
  &lt;tabPages
@@ -404,9 +501,12 @@ Contains properties such as the colours, width, height, padding, and dimensions 
     alt = "true|false"
     pixelSnapping = "true|false"
     iconOffset = "NUMBER"
+    style7 = "true|false"
+    lazyRender = "true|false"
+    recycle = "true|false"
  /&gt;
  
- </td></tr><tr class="prow1"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="UIViewFlipper.html">UIViewFlipper</a></td><td class="summaryTableLastCol">
+ </td></tr><tr class="prow0"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="UIViewFlipper.html">UIViewFlipper</a></td><td class="summaryTableLastCol">
   MadComponents view flipper container
  
  &lt;viewFlipper
@@ -424,7 +524,7 @@ Contains properties such as the colours, width, height, padding, and dimensions 
     autoLayout = "true|false"
  /&gt;
  
- </td></tr><tr class="prow0"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="UIWindow.html">UIWindow</a></td><td class="summaryTableLastCol">
+ </td></tr><tr class="prow1"><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableSecondCol"><a href="UIWindow.html">UIWindow</a></td><td class="summaryTableLastCol">
  UIWindow for popup windows
  
  &lt;
@@ -445,4 +545,4 @@ Contains properties such as the colours, width, height, padding, and dimensions 
    alt = "true|false"
  /&gt;
  
- </td></tr></table><p></p><div><p></p><center class="copyright"><footer></footer><br/>Tue Oct 14 2014, 11:48 AM +08:00  </center></div></div></body></html><!--<br/>Tue Oct 14 2014, 11:48 AM +08:00  -->
+ </td></tr></table><p></p><div><p></p><center class="copyright"><footer></footer><br/>Wed Apr 8 2015, 01:37 PM +07:00  </center></div></div></body></html><!--<br/>Wed Apr 8 2015, 01:37 PM +07:00  -->

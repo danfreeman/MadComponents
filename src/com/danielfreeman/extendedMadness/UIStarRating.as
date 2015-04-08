@@ -63,7 +63,6 @@ package com.danielfreeman.extendedMadness {
 			var onColour:uint = attributes.backgroundColours.length>0 ? attributes.backgroundColours[0] : Star.FRONT_COLOUR;
 			var offColour:uint = attributes.backgroundColours.length>1 ? attributes.backgroundColours[1] : Star.BACK_COLOUR;
 			
-		//	screen.addChild(this);
 			super(screen, attributes);
 			for (var i:int=0;i<STARS;i++) {
 				var star:Star=new Star(this,i*(Star.GAP+size), 0, size, onColour, offColour);

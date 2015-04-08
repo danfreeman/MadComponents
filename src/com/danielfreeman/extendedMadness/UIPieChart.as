@@ -46,6 +46,9 @@ package com.danielfreeman.extendedMadness
 	 *    palette = "#rrggbb, #rrggbb, ..."
 	 *    paletteStart = "n"
 	 *    order = "rows|columns"
+	 *    increment = "NUMBER"
+	 *    minimum = "NUMBER"
+	 *    maximum = "NUMBER"
 	 * /&gt;
 	 * </pre>
 	 * */	
@@ -171,7 +174,7 @@ package com.danielfreeman.extendedMadness
 	//	}
 		
 		
-		override public function get height():Number {
+		override public function get theHeight():Number {
 			return _graph.height - OFFSET;
 		}
 		

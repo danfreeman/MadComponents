@@ -303,7 +303,8 @@ package com.danielfreeman.madcomponents {
 					}
 					else {
 						if (_style7) {
-							graphics.beginFill( (_colours.length > 0) ? _colours[0] : _colour);
+							var colour7:uint = (_colours.length > 0) ? _colours[0] : _colour;
+							graphics.beginFill( pressed ? Colour.lighten(colour7, 8) : colour7);
 						//	graphics.beginFill(0xcc9900);
 						}
 						else {
